@@ -17,10 +17,10 @@
 #define EDGECODE(a, b) pgm_read_byte(&edgecodes[a][b])
 
 const long nodes[NODECOUNT][3] PROGMEM = {
-  { 1500,  1500, -1500},
-  { 1500, -1500, -1500},
-  {-1500, -1500, -1500},
-  {-1500,  1500, -1500},
+  { 10,  10, -10},
+  { 10, -10, -10},
+  {-10, -10, -10},
+  {-10,  10, -10},
   { 1500,  1500, 1500},
   {-1500,  1500, 1500},
   {-1500, -1500, 1500},
@@ -145,27 +145,26 @@ void rotateCube(int count) {
     }
 
       // default auto-rotation mode
-      mesh_rotation.x+=3;
-      mesh_rotation.y+=2;
-//      mesh_rotation.z++;
-    
+      mesh_rotation.x+=0;
+      mesh_rotation.y+=0;
+      mesh_rotation.z+=0;
+     
     if (mesh_rotation.x > 360) mesh_rotation.x = 0;
     if (mesh_rotation.y > 360) mesh_rotation.y = 0;
     if (mesh_rotation.z > 360) mesh_rotation.z = 0;
     draw_wireframe_quads(proj_nodes);
     laser.off();
     // keep rotation locked to maximum time the cube takes, which is 20000 micros
-    long elapsed = micros() - time;
-    if (elapsed < 20000) { delayMicroseconds(20000-elapsed); }
-    // do an intro/extro animation
-    if (lo < 120) {
-      laser.setOffset(2048 - (120-lo)*20,2048);
-    }
-    if (lo > count - 60) {
-      laser.setScale(scale);
-      scale -= 0.02;
-      if (scale <0) { scale = 0; }
-    }
+//    long elapsed = micros() - time;
+//    if (elapsed < 20000) { delayMicroseconds(20000-elapsed); }
+//    // do an intro/extro animation
+//    if (lo < 120) {
+//      laser.setOffset(2048 - (120-lo)*20,2048);
+//    }
+//    if (lo > count - 60) {
+//      laser.setScale(scale);
+//      scale -= 0.02;
+//      if (scale <0) { scale = 0; }
+//    }
   }
 }
-

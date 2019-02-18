@@ -247,7 +247,6 @@ void Laser::sendtoRaw (long xNew, long yNew)
 
 void Laser::drawline(long x1, long y1, long x2, long y2)
 {
-  if (_x != x1 or _y != y1) 
   {
     off();
     sendto(x1,y1);
@@ -256,6 +255,20 @@ void Laser::drawline(long x1, long y1, long x2, long y2)
   sendto(x2,y2);
   wait(LASER_LINE_END_DELAY);
 }
+
+//void Laser::rect(long x1, long y1, long x2, long y2)
+//{
+//  if (_x != x1 or _y != y1) 
+//  {
+//    off();
+//    sendto(x1,y1);
+//  }
+//  on();
+//  sendto(x1+x2,y1);
+//  sendto(x1+x2,y1+y2);
+//  sendto(x1+x2,y1);
+//  wait(LASER_LINE_END_DELAY);
+//}
 
 void Laser::on()
 {
@@ -292,4 +305,3 @@ void Laser::setOffset(long offsetX, long offsetY)
   _offsetX = offsetX;
   _offsetY = offsetY;
 }
-

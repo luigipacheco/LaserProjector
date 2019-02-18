@@ -90,4 +90,3 @@ void Matrix3::applyMatrix(const Matrix3& matrix, const Vector3i& in, Vector3i& o
              matrix.m[2][2] * in.z) >> PSHIFT;
   
 }
-

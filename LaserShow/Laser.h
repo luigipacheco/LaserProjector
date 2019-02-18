@@ -14,9 +14,9 @@
 #define LASER_QUALITY 64
 
 // Defines how long the galvos wait for the on/off toggling of the laser pointer (in microseconds), this will depend on your laser pointer.
-#define LASER_TOGGLE_DELAY 500
+#define LASER_TOGGLE_DELAY 300 //500
 // Defines how long the galvos wait at the end of a line (currently only used for the 3D cube rendering, in microseconds).
-#define LASER_LINE_END_DELAY 200
+#define LASER_LINE_END_DELAY 150 /200
 // Defines the delay the laser waits after reaching a given position (in microseconds).
 #define LASER_END_DELAY 5
 // Defines the delay after each laser movement (used when interpolating lines, in microseconds), if not defines, 0 is used
@@ -48,6 +48,8 @@ public:
 
   //! draws a line by turning the laser off, going to x1,y1, turning it on and going to x2,y2.
   void drawline(long x1, long y1, long x2, long y2);
+
+ // void rect(long x1, long y1, long x2, long y2);
 
   void wait(long length);
 

@@ -35,4 +35,3 @@ long SIN(unsigned int angle);
 long COS(unsigned int angle);
 
 #endif
-

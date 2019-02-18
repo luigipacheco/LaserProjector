@@ -184,4 +184,3 @@ void Drawing::calcObjectBox(const unsigned short* data, int size, long& centerX,
   width = x1 - x0;
   height = y1 - y0;
 }
-

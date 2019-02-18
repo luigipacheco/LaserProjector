@@ -13,13 +13,14 @@ Laser laser(5);
 void setup()
 {  
   laser.init();
+  //Serial.begin(9600);
 }
 
 
 void letterEffect()
 {  
-  String dyn = "AZAZAYBY";
-  String lu  = "DELTAFLO";
+  String dyn = "GROUP2";
+  String lu  = "LASER DRONE";
   int w = Drawing::stringAdvance(lu);
   laser.setScale(3048./w);
   laser.setOffset(2048,2048);
@@ -122,11 +123,11 @@ void globe(int count) {
 }
 
 // draw a circle using sin/cos
-void circle() {
+void circle(float sides) {
   const int scale = 12;
   laser.sendto(SIN(0)/scale, COS(0)/scale);
   laser.on();
-  for (int r = 5;r<=360;r+=5)
+  for (int r = 0;r<=360;r+=360/sides)
   {    
     laser.sendto(SIN(r)/scale, COS(r)/scale);
   }
@@ -140,10 +141,11 @@ void countDown() {
   int center = Drawing::advance('9');
   for (char j = '9';j>'0';j--) {
     float scale = 0.0;
+    
     float step = 0.01;
     for (int i = 0;i<40;i++) {
       laser.setScale(1);
-      circle();
+      circle(32);
       laser.setScale(scale);
       Drawing::drawLetter(j, -center/3, -center*2/3 + 100);   
       scale += step;
@@ -250,6 +252,21 @@ void drawBike()
   }
 }
 
+void drawHeart()
+{
+  int count = 140;
+  laser.setScale(3);
+  laser.setOffset(0,0);
+  long x = -2500;
+  long y = 1000;
+  for (int i = 0;i<count;i++) {
+    laser.setOffset(x,y);
+    Drawing::drawObject(draw_heart, sizeof(draw_heart)/4);
+    x += 50;
+  }
+}
+
+
 void drawArduino3D()
 {
   laser.setScale(1.);
@@ -263,7 +280,6 @@ void drawArduino3D()
     angle += 8;
   }
 }
-
 void whatAbout3D()
 {
   int w1 = Drawing::stringAdvance("WHAT");
@@ -372,25 +388,131 @@ void drawScroller(String s, float scale = 0.5, int offsetY = 2048, int speed = 1
   }
 }
 
-void loop() {
-  countDown();
-  letterEffect();
-  presents();
-  arduino();
-  laserShow();
-  drawPlane();
-  drawLogo();
-  drawScroller(String("THIS PROJECT IS AVAILABLE ON INSTRUCTABLES.COM"),0.5,2048,100);
-  drawWeLove();
-  drawArduino2DRotate();
-  whatAbout3D();
-  rotateCube(400);
-  drawBike();
-  globe(200);
-  drawArduino3D();
-  drawScroller(String("SOURCE CODE AVAILABLE ON GITHUB!"),0.25,2048,100);
+void weird() {
+  /*const int scale = 12;
+  laser.setScale(1);
+  laser.on();
+  for (int r = 0;r<=100;r)
+  {    
+    laser.sendto(r*scale,0);
+  }
+  laser.off();*/
+  laser.setScale(2);
+  laser.setOffset(0,0);
+   //circle();
+  //laser.sendto(SIN(0)/scale, COS(0)/scale);
+  
+  laser.on();
+  /*for (int y = 0;y<2480;y+=20)
+  { 
+    for (int x = 0;x<2480;x+=20)
+    {    
+      laser.sendto(x, y);
 
-//  drawObjects();
-//  jumpingText();
+    }
+  }*/
+
+  laser.sendto(random(0,2048),random(0,2048));
+  laser.off();
+  //Serial.println("--------------------------");
+  /*laser.on();
+  for (int r = 0;r<=100;r)
+  {    
+    laser.sendto(r/100,0);
+  }
+  laser.off();*/
+      
+}
+void rect(int x1, int y1, int x2 , int y2) {
+  const int scale = 2;
+  int count = 1;
+  laser.setScale(1);
+  laser.setOffset(0,0);
+//  laser.on();
+//  laser.sendto(x1,y1);
+//  laser.sendto(x1,y1+y2);
+//  laser.sendto(x1+x2,y1+y2);
+//  laser.sendto(x1+x2,y1);
+//  laser.sendto(x1,y1);
+//  laser.off();
+    laser.drawline(x1,y1,x1,y1+y2);
+    laser.drawline(x1,y1+y2,x1+x2,y1+y2);
+    laser.drawline(x1+x2,y1+y2,x1+x2,y1);
+    laser.drawline(x1+x2,y1,x1,y1);
+ 
+      
+}
+void circle2() {
+  const int scale = 1;
+  laser.setScale(1);
+  laser.setOffset(0,0);
+  laser.sendto(SIN(0), COS(0));
+  laser.on();
+  for (int r = 5;r<=3600;r+=5)
+  {    
+    laser.sendto(SIN(r*2), COS(r*3));
+  }
+  laser.off();
 }
 
+void drawCircle(int x1, int y1, float s, float sides) {
+  laser.setScale(s);
+  laser.setOffset(x1,y1);
+  laser.off();
+  circle(sides);
+}
+void drawCrosshair(){
+  //drawCircle(2048,2048,0.75,12);
+  //drawCircle(2048,2048,1,12);
+  laser.setScale(1);
+  laser.setOffset(0,0);
+  laser.drawline(1,2048,2048,2048);
+  laser.drawline(2048,2048,4095,2048);
+  laser.drawline(2048,1,2048,2048);
+  laser.drawline(2048,2048,2048,4095);
+  laser.drawline(0,0,4095,4095);
+  laser.drawline(4095,0,0,4095);
+
+  //laser.off();
+  //laser.drawline(x1,y1,x1,y2);
+}
+
+void drawGrid(){
+  int count = 1;
+  laser.setScale(2);
+  laser.setOffset(0,0);
+  circle(32);
+}
+void loop() {
+  //weird();
+  //rect(1,1,2000,1000);
+ //drawCircle(2047,2047,1,12);
+  rect(0,0,500,500);
+  rect(2048-250,2048-250,500,500);
+  rect(4095-500,4095-500,500,500);
+  rect(0,4095-500,500,500);
+  rect(4095-500,0,500,500);
+  //drawCrosshair();
+  //countDown();
+  //letterEffect();
+  //presents();
+  //arduino();
+  //laserShow(); 
+  //drawPlane();
+  //drawLogo();
+  //drawScroller(String("THE CAKE IS A LIE!"),2,1024,500);
+  //drawScroller(String("MRAC"),2,2048,500);
+  //drawWeLove();
+  //drawArduino2DRotate();
+  //whatAbout3D();
+  //rotateCube(200);
+  //drawObjects();
+  //drawHeart();
+  //drawBike();
+  //circle();
+  //drawArduino3D();
+  //drawScroller(String("SOURCE CODE AVAILABLE ON GITHUB!"),0.25,2048,100);
+  //drawObama();
+//  drawObjects();
+ // jumpingText();
+}
