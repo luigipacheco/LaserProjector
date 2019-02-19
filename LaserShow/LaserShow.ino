@@ -41,13 +41,13 @@ void letterEffect()
 }
 
 void presents() {
-  String str = "PRESENTS";
+  String str = "MRAC";
   int w = Drawing::stringAdvance(str);
   laser.setScale(3048./w);
   laser.setOffset(2048,2048);
-  float scale = 0;
-  for (int i = 0; i<70;i++) {
-    scale += 0.01;
+  float scale = 1;
+  for (int i = 0; i<100;i++) {
+    scale -= 0.01;
     laser.setScale(scale);
     Drawing::drawString(str,-w/2, 0);
   }
@@ -388,32 +388,11 @@ void drawScroller(String s, float scale = 0.5, int offsetY = 2048, int speed = 1
   }
 }
 
-void weird() {
-  /*const int scale = 12;
+void noise(int ox, int oy) {
   laser.setScale(1);
-  laser.on();
-  for (int r = 0;r<=100;r)
-  {    
-    laser.sendto(r*scale,0);
-  }
-  laser.off();*/
-  laser.setScale(2);
   laser.setOffset(0,0);
-   //circle();
-  //laser.sendto(SIN(0)/scale, COS(0)/scale);
-  
-  laser.on();
-  /*for (int y = 0;y<2480;y+=20)
-  { 
-    for (int x = 0;x<2480;x+=20)
-    {    
-      laser.sendto(x, y);
-
-    }
-  }*/
-
-  laser.sendto(random(0,2048),random(0,2048));
-  laser.off();
+  laser.sendto(ox,oy);
+  laser.sendto(random(0,4095),random(0,4095));
   //Serial.println("--------------------------");
   /*laser.on();
   for (int r = 0;r<=100;r)
@@ -477,21 +456,55 @@ void drawCrosshair(){
   //laser.drawline(x1,y1,x1,y2);
 }
 
-void drawGrid(){
-  int count = 1;
-  laser.setScale(2);
+void drawGrid(int sx ,int sy, int closed){
+  int xgrid = 4096/sx;
+  int ygrid = 4096/sy;
+  laser.setScale(1);
   laser.setOffset(0,0);
-  circle(32);
+  if(closed){
+    rect(0,0,4095,4094);
+    }
+  //for (int l = 4096/sx;r<=3600;r+=5)
+  for(int l = 4096/sx ; l<xgrid*sx; l+=xgrid){
+    laser.drawline(l,1,l,4096);
+  }
+  for(int p = 4096/sy ; p<ygrid*sy; p+=ygrid){
+    laser.drawline(1,p,4096,p);
+  }
 }
-void loop() {
-  //weird();
-  //rect(1,1,2000,1000);
- //drawCircle(2047,2047,1,12);
-  rect(0,0,500,500);
+
+void loc(int x, int y,int grow, int grid){
+  for(int i = 0; i<grow*5 ; i+=grow){
+  for(int t = 0; t<2 ; t=t+1){
+    if(grid){
+  drawGrid(3,3,true);
+    }
+  rect(x-(i/2),y-(i/2),i,i);
+  }
+  }
+  }
+  
+void fiveSquares(){
+   rect(0,0,500,500);
   rect(2048-250,2048-250,500,500);
   rect(4095-500,4095-500,500,500);
   rect(0,4095-500,500,500);
   rect(4095-500,0,500,500);
+}
+void loop() {
+ // loc(1000,3000, 200,true);
+  //noise(1,1);
+  //noise(50,3500);
+  //noise(4095,4095);
+ // noise(2048,2048);
+ // drawCircle(2048,2048,.5,12);
+//drawGrid(3,3,true);
+  //noise(3500,50);
+  //rect(1,1,4000,1000);
+   //rect(1,1,1000,4000);
+
+ //drawCircle(2047,2047,1,12);
+   //fiveSquares();
   //drawCrosshair();
   //countDown();
   //letterEffect();
@@ -500,11 +513,11 @@ void loop() {
   //laserShow(); 
   //drawPlane();
   //drawLogo();
-  //drawScroller(String("THE CAKE IS A LIE!"),2,1024,500);
+  //drawScroller(String("WAZAP!"),2,1024,500);
   //drawScroller(String("MRAC"),2,2048,500);
   //drawWeLove();
   //drawArduino2DRotate();
-  //whatAbout3D();
+  whatAbout3D();
   //rotateCube(200);
   //drawObjects();
   //drawHeart();
