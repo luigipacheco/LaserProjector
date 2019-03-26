@@ -16,15 +16,18 @@
 #define EDGE(a, b) pgm_read_byte(&faces[a][b])
 #define EDGECODE(a, b) pgm_read_byte(&edgecodes[a][b])
 
+long csize = 2000;
+long negxsize = -2000;
+
 const long nodes[NODECOUNT][3] PROGMEM = {
-  { 10,  10, -10},
-  { 10, -10, -10},
-  {-10, -10, -10},
-  {-10,  10, -10},
-  { 1500,  1500, 1500},
-  {-1500,  1500, 1500},
-  {-1500, -1500, 1500},
-  { 1500, -1500, 1500},
+  { csize,  csize, -2000},
+  { csize, -2000, -2000},
+  {-2000, -2000, -2000},
+  {-2000, csize, -2000},
+  { csize,  csize, csize},
+  {-2000,  csize, csize},
+  {-2000, -2000, csize},
+  { csize, -2000, csize},
 };
 
 const unsigned char faces[TRICOUNT][4] PROGMEM = {
@@ -49,7 +52,7 @@ const unsigned char edgecodes[TRICOUNT][4] PROGMEM = {
 // global variables
 // ----------------------------------------------
 Matrix3 m_world;
-Vector3i mesh_rotation = {0, 0, 0};
+Vector3i mesh_rotation = {325, 330,90};
 Vector3i mesh_position = {0, 0, 0};
 
 

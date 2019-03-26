@@ -1,7 +1,7 @@
 #include "Basics.h"
 #include "Arduino.h"
 
-// Copied from "Arduino - Tiny 3D Engine" by Themistokle "mrt-prodz" Benetatos.
+// Copied from "Arduino - Tiny 3D " by Themistokle "mrt-prodz" Benetatos.
 // https://github.com/mrt-prodz/ATmega328-Tiny-3D-Engine
 // (and adapted for laser/quad rendering)
 

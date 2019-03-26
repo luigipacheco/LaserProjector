@@ -1,10 +1,25 @@
-# LaserProjector
-An Arduino driven Laser Projector using real galvos.
+# AR LaserProjector
+Laser projector with pan and tilt aruco marker alignment using OpenCV
 
-Building the project is explained here:
+## Credits
+
+IAAC Students:
+ - Stefano Meloni
+ - Sebastian Voigt
+ - Subash Prajapat
+ - Luis Pacheco
+
+Faculty:
+ - Angel Muñoz 
+
+####Open Source:
+
+Based on:
 
 http://www.instructables.com/id/Arduino-Laser-Show-With-Real-Galvos/
 
-Have a look at this video to see the filmed laser show:
+https://github.com/njanirudh/Aruco_Tracker
 
-https://youtu.be/JCon-suqPEE
+https://www.instructables.com/id/FACE-TRACKING-USING-ARDUINO-/
+
+

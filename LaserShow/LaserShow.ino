@@ -6,16 +6,47 @@
 #include "Cube.h"
 #include "Objects.h"
 #include "Logo.h"
+#include <Servo.h>
 
+Servo servoVer; //Vertical Servo
+Servo servoHor; //Horizontal Servo
+
+int x;
+int y;
+
+int prevX;
+int prevY;
 // Create laser instance (with laser pointer connected to digital pin 5)
-Laser laser(5);
+Laser laser(6);
 
 void setup()
 {  
   laser.init();
-  //Serial.begin(9600);
+  Serial.begin(9600);
+  servoVer.attach(5); //Attach Vertical Servo to Pin 5
+  servoHor.attach(3); //Attach Horizontal Servo to Pin 6
+  servoVer.write(90);
+  servoHor.write(90);
 }
 
+void Pos()
+{
+  if(prevX != x || prevY != y)
+  {
+    int servoX = map(x, 640, 0, 30, 150); //int servoX = map(x, 640, 0, 1, 179);
+    int servoY = map(y, 480, 0, 30, 150); //int servoY = map(y, 480, 0, 1, 179);
+
+    /*servoX = min(servoX, 179);
+    servoX = max(servoX, 70);
+    servoY = min(servoY, 179);
+    servoY = max(servoY, 95);*/
+    
+    servoHor.write(servoX);
+    servoVer.write(servoY);
+    //servoHor.write(x);
+    //servoVer.write(y);
+  }
+}
 
 void letterEffect()
 {  
@@ -252,6 +283,14 @@ void drawBike()
   }
 }
 
+void drawTest()
+{
+  laser.setScale(0.5);
+  laser.setOffset(0,0);
+  Drawing::drawObject(draw_test, sizeof(draw_test));
+ 
+}
+
 void drawHeart()
 {
   int count = 140;
@@ -473,15 +512,20 @@ void drawGrid(int sx ,int sy, int closed){
   }
 }
 
-void loc(int x, int y,int grow, int grid){
+void loc(int x, int y,int grow, int grid, String text, int ms){
+  for (int p = 0;p<ms ;p++){
   for(int i = 0; i<grow*5 ; i+=grow){
   for(int t = 0; t<2 ; t=t+1){
     if(grid){
-  drawGrid(3,3,true);
+  drawGrid(1,1,true);
     }
   rect(x-(i/2),y-(i/2),i,i);
-  }
-  }
+  laser.setOffset(x+500,y-200);
+  laser.setScale(0.3);
+  Drawing::drawString(text,0,0,1);
+      }
+      }
+    }
   }
   
 void fiveSquares(){
@@ -491,18 +535,182 @@ void fiveSquares(){
   rect(0,4095-500,500,500);
   rect(4095-500,0,500,500);
 }
-void loop() {
- // loc(1000,3000, 200,true);
+void bounce(int ms){
+  laser.setScale(1);
+  laser.setOffset(0,0);
+  float xpos = 2048;
+  float ypos= 0;    // Starting position of shape    
+  float xspeed = 100;  // Speed of the shape
+  float yspeed = 100;  // Speed of the shape
+  int xdirection = 2;  // Left or Right
+  int ydirection = 1;  // Top to Bottom
+  int width = 4095;
+  int height = 4095;
+  float scale = 0.2;
+  int rad = 500;
+  drawCircle(xpos, ypos, scale, 8);
+  for (int i=0; i<ms;i++){
+  xpos = xpos + ( xspeed * xdirection );
+  ypos = ypos + ( yspeed * ydirection );
+
+  if (xpos > width || xpos < 0) {
+    xdirection *= -1;
+  }
+  if (ypos > width || ypos < 0) {
+    ydirection *= -1;
+  }
+  drawCircle(xpos, ypos, scale, 8);
+  drawGrid(2,2,false);
+  }
+}
+void simpleText(String text, int x, int y,float s, int ms)
+{
+ // int w1 = Drawing::stringAdvance("WHAT");
+ for (int i = 0;i<ms ;i++){
+  laser.setOffset(0,0);
+  laser.setScale(s);
+  Drawing::drawString(text,x,y,1);
+ }
+  
+}
+void drawPolygon(int arr){
+  int arrsize = sizeof(arr);
+  Serial.println(arrsize);
+}
+void measure(int x1, int y1, int x2, int y2){
+  laser.setScale(1);
+  laser.setOffset(0,0);
+  laser.drawline(x1,y1,x2,y2);
+}
+
+void plug(int x,int y, int ms){
+  for (int i = 0;i<ms ;i++){
+  int sx = 600; 
+  int sy = 600;
+  //rect(x-(sx/2),y-(sy/2),sx,sy);
+  drawCircle(x,y,.3,12);
+  drawCircle(x-(sx/4),y,.05,12);
+  drawCircle(x+(sx/4),y,.05,12);
+  drawGrid(3,3,false);
+  laser.setOffset(x+(sx/2)+100,y);
+  laser.setScale(0.3);
+  Drawing::drawString("220 V",0,0,1);
+  }}
+  void window(int x,int y,int sx, int sy, String text, int ms){
+     for (int i = 0;i<ms ;i++){
+  rect(x-(sx/2),y-(sy/2),sx,sy);
+  rect(x-(sx/2-100),y-(sy/2-100),sx-200,sy-200);
+  laser.setOffset(x+(sx/2)+100,y);
+  laser.setScale(0.15);
+  Drawing::drawString(text,0,0,1);
+  drawGrid(1,1,true);
+  }}
+  void quad(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4){
+  laser.setScale(1);
+  laser.setOffset(0,0);
+  laser.drawline(x1,y1,x2,y2);
+  laser.drawline(x2,y2,x3,y3);
+  laser.drawline(x3,y3,x4,y4);
+  laser.drawline(x4,y4,x1,y1);
+  }
+  void triangle(int x1, int y1, int x2, int y2, int x3, int y3){
+  laser.setScale(1);
+  laser.setOffset(0,0);
+  laser.drawline(x1,y1,x2,y2);
+  laser.drawline(x2,y2,x3,y3);
+  laser.drawline(x3,y3,x1,y1);
+  }
+  void pent(int x1, int y1, int x2, int y2, int x3, int y3, int x4, int y4,int x5, int y5){
+  laser.setScale(1);
+  laser.setOffset(0,0);
+  laser.drawline(x1,y1,x2,y2);
+  laser.drawline(x2,y2,x3,y3);
+  laser.drawline(x3,y3,x4,y4);
+  laser.drawline(x4,y4,x5,y5);
+  laser.drawline(x5,y5,x1,y1);
+  }
+  void sebCube(){
+   laser.setScale(1);
+   laser.setOffset(0,0);
+
+   laser.drawline(1683,3778,1683,640);
+   laser.drawline(1683,640,3951,546);
+   laser.drawline(3951,546,2206,444);
+   laser.drawline(2206,444,2207,2969);
+   laser.drawline(2207,2969,46,3274);
+   laser.drawline(46,3274,1683,3778);
+   laser.drawline(1683,3778,3962,3388);
+   laser.drawline(3962,3388,2207,2969);
+   laser.drawline(54,518,1683,640);
+   laser.drawline(54,518,46,3274);
+   laser.drawline(2206,444,54,518);
+   laser.drawline(3951,546,3962,3388);
+  }
+  void sebCube2(){
+  quad(3951,546,3962,3388,2207,2969,2206,444);
+  quad(2206,444,3951,546,1683,640,54,518);
+  quad(54,518,1683,640,1683,3778,46,3274);
+  quad(46,3274,1683,3778,3962,3388,2207,2969);
+  laser.setScale(1);
+  laser.setOffset(0,0);
+  laser.drawline(2207,2969,3962,3388);
+  laser.drawline(3962,3388,3951,546);
+  //laser.drawline(3951,546,2206,444);
+  }
+  
+  
+ void loop() {
+  
+  if(Serial.available() > 0)
+  {
+    if(Serial.read() == 'X')
+    {
+      Serial.println("HI x");
+      x = Serial.parseInt();
+      if(Serial.read() == 'Y')
+      {
+        Serial.println("HI Y");
+        y = Serial.parseInt();
+       Pos();
+      }
+    }
+    while(Serial.available() > 0)
+    {
+      Serial.read();
+    }
+  }
+  //sebCube();
+  //simpleText("MRAC 2019",20,20,0.5,50);
+  //window(1000,3000, 500, 1000,"W1",100);
+  //quad(500,1000,500,3000,2000,3900,2000,1500);
+  //quad(2000,3900,3500,3000,3500,1000,2000,1500);
+  //quad(500,1000,2000,1500,3500,1000,2000,500);
+  //pent(1,1,1,500,1300,2500,3500,3500,1000,500);
+  sebCube2();
+  //triangle(1,1,500,500,1300,2500);
+  //window(3000,3000,600,1500,"W2",100);
+  //window(2000,1000,500,500,"W3",100);
+  //const int Array[][2] = {{1,2},{3,4},{5,6}};
+  //drawPolygon(Array);
+  //drawTest();
+  //plug(2000,1500,100);
+  //simpleText("I D",200,2000,0.4,1);
+  //simpleText("DUDE1",200,500,0.4,1);
+  //loc(2040,2040, 200,false,"TEST 1 ",100);
+  // bounce(100);
+  //loc(3500,3500, 200,false,"",1);
+  //measure(0,1,4000,4500);
+  //globe(20);
   //noise(1,1);
   //noise(50,3500);
   //noise(4095,4095);
  // noise(2048,2048);
- // drawCircle(2048,2048,.5,12);
+  //drawCircle(2048,2048,.5,24);
+  //drawCircle(2048,2048,.05,24);
 //drawGrid(3,3,true);
   //noise(3500,50);
   //rect(1,1,4000,1000);
-   //rect(1,1,1000,4000);
-
+ // rect(1,1,1000,4000);
  //drawCircle(2047,2047,1,12);
    //fiveSquares();
   //drawCrosshair();
@@ -513,11 +721,11 @@ void loop() {
   //laserShow(); 
   //drawPlane();
   //drawLogo();
-  //drawScroller(String("WAZAP!"),2,1024,500);
-  //drawScroller(String("MRAC"),2,2048,500);
+  //drawScroller(String("DUDE1!"),1,1024,500);
+  //drawScroller(String("MRAC"),1,2048,500);
   //drawWeLove();
   //drawArduino2DRotate();
-  whatAbout3D();
+  //whatAbout3D();
   //rotateCube(200);
   //drawObjects();
   //drawHeart();
@@ -525,7 +733,6 @@ void loop() {
   //circle();
   //drawArduino3D();
   //drawScroller(String("SOURCE CODE AVAILABLE ON GITHUB!"),0.25,2048,100);
-  //drawObama();
 //  drawObjects();
  // jumpingText();
 }
