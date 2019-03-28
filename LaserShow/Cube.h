@@ -5,6 +5,6 @@
 
 extern Laser laser;
 
-void rotateCube(int count);
+void rotateCube(int count, Vector3i vnormal);
 
 #endif

@@ -11,8 +11,12 @@
 Servo servoVer; //Vertical Servo
 Servo servoHor; //Horizontal Servo
 
+
 int x;
 int y;
+int a;
+int b;
+int c;
 
 int prevX;
 int prevY;
@@ -664,15 +668,27 @@ void plug(int x,int y, int ms){
   if(Serial.available() > 0)
   {
     if(Serial.read() == 'X')
-    {
-      Serial.println("HI x");
+    {//
+      //Serial.println("HI x");
       x = Serial.parseInt();
       if(Serial.read() == 'Y')
       {
-        Serial.println("HI Y");
+        //Serial.println("HI Y");
         y = Serial.parseInt();
-       Pos();
+        Pos();
+        if(Serial.read() == 'A')
+        {
+          a = Serial.parseInt();
+          if(Serial.read() == 'B')
+          {
+          b = Serial.parseInt();
+          if(Serial.read() == 'C')
+            {
+            c = Serial.parseInt();
+            } 
+        }
       }
+    }
     }
     while(Serial.available() > 0)
     {
@@ -686,7 +702,12 @@ void plug(int x,int y, int ms){
   //quad(2000,3900,3500,3000,3500,1000,2000,1500);
   //quad(500,1000,2000,1500,3500,1000,2000,500);
   //pent(1,1,1,500,1300,2500,3500,3500,1000,500);
-  sebCube2();
+  //sebCube2();
+//  quad(1886,1172,3933,1514,1453,1635,63,1229);
+//  quad(63,1229,1453,1636,1460,3318,70,2366);
+//  quad(70,2366,1460,3318,3935,3034,1890,2232);
+//  quad(1890,2232,3935,3034,3933,1514,1886,1172);
+
   //triangle(1,1,500,500,1300,2500);
   //window(3000,3000,600,1500,"W2",100);
   //window(2000,1000,500,500,"W3",100);
@@ -726,7 +747,8 @@ void plug(int x,int y, int ms){
   //drawWeLove();
   //drawArduino2DRotate();
   //whatAbout3D();
-  //rotateCube(200);
+  Vector3i vn = {a, b , c};
+  rotateCube(1,vn);
   //drawObjects();
   //drawHeart();
   //drawBike();

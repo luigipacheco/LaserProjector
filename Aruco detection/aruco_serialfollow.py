@@ -22,6 +22,7 @@ stepx =2
 stepy = 1
 tol = 2
 
+## Change number for camera index
 cap = cv2.VideoCapture(1)
 # termination criteria
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -86,6 +87,7 @@ while (True):
         avgx = int((corners[0][0][0][0]+corners[0][0][1][0]+corners[0][0][2][0]+corners[0][0][3][0])/4)  #use central cordinates from aruco
         avgy = int((corners[0][0][0][1] + corners[0][0][1][1] + corners[0][0][2][1] + corners[0][0][3][1]) / 4) #use central cordinates from aruco
 
+        ###### Translation (rotation of servos) #####
 
         if tvec[i][0][0]*100<=(-tol):
             moveX-=stepx
@@ -100,7 +102,21 @@ while (True):
             moveY+=stepy
             #print(moveX)
 
-        data = "X{0:d}Y{1:d}".format(moveX, moveY)
+        ###### Rotation (rotation of cube) #####
+
+        #rotM = np.zeros(shape=(3, 3))
+        #cv2.Rodrigues(rvec[i - 1], rotM, jacobian=0)
+
+        rotateX = int(rvec[0][0][0])*10
+        rotateY = int(rvec[0][0][1])*10
+        rotateZ = int(rvec[0][0][2])*10
+
+        #print(rotateX)
+        #print(rotateY)
+        #print(rotateZ)
+
+        #data = "X{0:d}Y{1:d}".format(moveX, moveY)
+        data = "X{0:d}Y{1:d}A{2:d}B{3:d}C{4:d}".format(moveX, moveY,rotateX,rotateY,rotateZ)
         print("output = '" + data + "'")
         arduino.write(data.encode())
 

@@ -16,18 +16,16 @@
 #define EDGE(a, b) pgm_read_byte(&faces[a][b])
 #define EDGECODE(a, b) pgm_read_byte(&edgecodes[a][b])
 
-long csize = 2000;
-long negxsize = -2000;
 
 const long nodes[NODECOUNT][3] PROGMEM = {
-  { csize,  csize, -2000},
-  { csize, -2000, -2000},
+  { 2000,  2000, -2000},
+  { 2000, -2000, -2000},
   {-2000, -2000, -2000},
-  {-2000, csize, -2000},
-  { csize,  csize, csize},
-  {-2000,  csize, csize},
-  {-2000, -2000, csize},
-  { csize, -2000, csize},
+  {-2000, 2000, -2000},
+  { 2000,  2000, 2000},
+  {-2000,  2000, 2000},
+  {-2000, -2000, 2000},
+  { 2000, -2000, 2000},
 };
 
 const unsigned char faces[TRICOUNT][4] PROGMEM = {
@@ -52,7 +50,7 @@ const unsigned char edgecodes[TRICOUNT][4] PROGMEM = {
 // global variables
 // ----------------------------------------------
 Matrix3 m_world;
-Vector3i mesh_rotation = {325, 330,90};
+Vector3i mesh_rotation = {0, 0, 0};
 Vector3i mesh_position = {0, 0, 0};
 
 
@@ -120,18 +118,26 @@ void draw_wireframe_quads(const long (*n)[2]) {
   } while(i--);
 }
 
-void rotateCube(int count) {
+void rotateCube(int count, Vector3i vnormal) {
+  //Serial.println(negxsize);
   laser.setScale(1);
   laser.setOffset(2048,2048);
   float scale = 1.;
+  mesh_rotation.x = vnormal.x;
+  mesh_rotation.y = vnormal.y;
+  mesh_rotation.z = vnormal.z;
   for (int lo = 0;lo<count;lo++) 
   {    
     long time = micros();
+    
     // rotation
     Matrix3 tmp;
     m_world = Matrix3::rotateX(mesh_rotation.x);
     Matrix3::multiply(Matrix3::rotateY(mesh_rotation.y), m_world, tmp);
     Matrix3::multiply(Matrix3::rotateZ(mesh_rotation.z), tmp, m_world);
+    //m_world = Matrix3::rotateX(vnormal.x);
+    //Matrix3::multiply(Matrix3::rotateY(vnormal.y), m_world, tmp);
+    //Matrix3::multiply(Matrix3::rotateZ(vnormal.z), tmp, m_world);
 
     // project nodes with world matrix
     Vector3i p1;
@@ -147,6 +153,7 @@ void rotateCube(int count) {
       proj_nodes[i][1] = ((1000*(long)p.y) / (3000 + (long)p.z/2));
     }
 
+    
       // default auto-rotation mode
       mesh_rotation.x+=0;
       mesh_rotation.y+=0;
